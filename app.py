@@ -10,8 +10,8 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 # Admin credentials (in a real application, store these securely)
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = hash_password("password123")  # Change this to a secure password
+ADMIN_USERNAME = "Akash S G"
+ADMIN_PASSWORD = hash_password("Akashsg@7422")  # Change this to a secure password
 
 # Function to add background image and set table style
 def add_bg_from_local(image_file):
