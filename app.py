@@ -43,7 +43,7 @@ def add_bg_from_local(image_file):
     )
 
 # Add your background image
-add_bg_from_local('D:/Project/logo1.png')  # Call the function with the path to your image
+add_bg_from_local('logo1.png')  # Call the function with the path to your image
 
 # Streamlit app
 st.title("Site Data Viewer")  # Set the title of the app
