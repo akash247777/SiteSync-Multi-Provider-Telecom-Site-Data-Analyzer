@@ -15,7 +15,40 @@ ADMIN_PASSWORD = hash_password("password123")  # Change this to a secure passwor
 
 # Function to add background image and set table style
 def add_bg_from_local(image_file):
-    # ... (keep the existing function as is)
+    with open(image_file, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: local;
+        }}
+        .main {{
+            position: relative;
+            z-index: 2;
+        }}
+        .stDataFrame table {{
+            background-color: black !important;
+            border-collapse: collapse !important;
+            border: 1px solid #050505 !important;
+        }}
+        .stDataFrame th {{
+            background-color: #f0f2f6 !important;
+            border: 1px solid #d3d3d3 !important;
+            padding: 8px !important;
+        }}
+        .stDataFrame td {{
+            background-color: black !important;
+            border: 1px solid #d3d3d3 !important;
+            padding: 8px !important;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Streamlit app
 st.title("Site Data Viewer")
@@ -76,7 +109,24 @@ else:
 
         # Function to retrieve data based on filters
         def get_filtered_data(site_number, date, region, cluster_manager, area_manager, area_executive):
-            # ... (keep the existing function as is)
+            filtered_data = combined_df.copy()
+            
+            if site_number:
+                filtered_data = filtered_data[filtered_data['Site'].astype(str).str.contains(str(site_number))]
+            if date:
+                filtered_data = filtered_data[filtered_data['Date'].dt.strftime('%d-%m-%Y') == date.strftime('%d-%m-%Y')]
+            if region:
+                filtered_data = filtered_data[filtered_data['Region'] == region]
+            if cluster_manager:
+                filtered_data = filtered_data[filtered_data['Cluster MANAGER (L1)'] == cluster_manager]
+            if area_manager:
+                filtered_data = filtered_data[filtered_data['Area MANAGER (L2)'] == area_manager]
+            if area_executive:
+                filtered_data = filtered_data[filtered_data['Area EXECUTIVE (L3)'] == area_executive]
+            
+            # Convert the Date column to dd-mm-yyyy format
+            filtered_data['Date'] = filtered_data['Date'].dt.strftime('%d-%m-%Y')
+            return filtered_data
 
         # Create input field for site number
         site_number = st.text_input("Enter site number:")
